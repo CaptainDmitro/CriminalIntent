@@ -7,6 +7,7 @@ import android.view.TextureView
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
@@ -50,9 +51,25 @@ class CrimeListFragment : Fragment() {
         crimeRecyclerView.adapter = adapter
     }
 
-    private inner class CrimeHolder(view: View) : RecyclerView.ViewHolder(view) {
-        var titleTextView: TextView = itemView.findViewById(R.id.crime_title)
-        var dateTextView: TextView = itemView.findViewById(R.id.crime_date)
+    private inner class CrimeHolder(view: View) : RecyclerView.ViewHolder(view), View.OnClickListener {
+        private lateinit var crime: Crime
+
+        private var titleTextView: TextView = itemView.findViewById(R.id.crime_title)
+        private var dateTextView: TextView = itemView.findViewById(R.id.crime_date)
+
+        init {
+            itemView.setOnClickListener(this)
+        }
+
+        fun bind(crime: Crime) {
+            this.crime = crime
+            titleTextView.text = crime.title
+            dateTextView.text = crime.date.toString()
+        }
+
+        override fun onClick(v: View) {
+            Toast.makeText(context, "${crime.title} pressed!", Toast.LENGTH_SHORT).show()
+        }
     }
 
     private inner class CrimeAdapter(var crimes: List<Crime>) : RecyclerView.Adapter<CrimeHolder>() {
@@ -64,11 +81,8 @@ class CrimeListFragment : Fragment() {
         override fun getItemCount(): Int = crimes.size
 
         override fun onBindViewHolder(holder: CrimeHolder, position: Int) {
-            var crime = crimes[position]
-            holder.apply {
-                titleTextView.text = crime.title
-                dateTextView.text = crime.date.toString()
-            }
+            val crime = crimes[position]
+            holder.bind(crime)
         }
     }
 
