@@ -17,7 +17,7 @@
         android:layout_height="wrap_content"
         android:hint="@string/crime_title_hint"
         android:inputType="text"
-        android:autofillHints="text" />
+        android:autofillHints="username"/>
 
     <TextView
         style="?android:listSeparatorTextViewStyle"
